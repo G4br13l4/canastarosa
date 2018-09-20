@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {Stores} from './components/Stores';
+import {SearchBar} from './components/SearchBar';
 import './App.css';
-import data from './data.js';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state= {
       rawData:[],
-      stores:[]
+      products:[]
     };
     this.getData = this.getData.bind(this);
-    this.getStores = this.getStores.bind(this);
+
+    this.stores = React.createRef();
+
+    this.paintProds = this.paintProds.bind(this);
   }
 
   componentDidMount() {
     this.getData();
-    this.getStores();
   }
 
   getData(){
@@ -29,7 +31,7 @@ class App extends Component {
           var json_obj = JSON.parse(xhr.responseText);
           status = true;
           this.setState({rawData:json_obj.results});
-          //this.getStores();
+          this.refs.stores.getStores();
         } else {
           console.error(xhr.statusText);
         }
@@ -41,46 +43,21 @@ class App extends Component {
     xhr.send(null);
   }
 
-  getStores(){
-    //let allProducts = this.state.rawData;
-    let allProducts= data.results;
-    //get all the names of the stores
-    let allStores = allProducts.map(function(x) {
-        return x.store.name;
-    });
-
-    //get unique names of stores
-    const unique = (value, index, self) => {
-        //returns the first index at which a given element can be found in the array
-        return self.indexOf(value) === index;
-    }
-    const uniqueStores = allStores.filter(unique).sort();
-    this.countStores(uniqueStores, allStores);
-  }
-
-  countStores(uniqueStores, allStores){
-    let stores = uniqueStores.map(function(unique) {
-      let count=0;
-        allStores.forEach(function(element) {
-          if(unique===element){
-            count++
-          }
-        });
-      //create template of store
-      let store=(
-        <div>
-          <p>{unique}<span> ({count})</span></p>
+  paintProds(prods){
+    let showProds = prods.map(function(prod) {
+      let template=(
+        <div className="prod-card">
+          <div className="img-box">
+            <img src={prod.photo.small}/>
+          </div>
+          <p>{prod.name[0].toUpperCase()+ prod.name.slice(1)}</p>
+          <p>{prod.store.name}</p>
+          <p>${prod.price}</p>
         </div>
       );
-      return store;
+      return template;
     });
-    //paint store
-    this.setState({stores:stores})
-  }
-
-  search(e){
-    e.preventDefault();
-    console.log("hello")
+    this.setState({products:showProds})
   }
 
   render() {
@@ -109,20 +86,17 @@ class App extends Component {
           <p>Delicioso</p>
         </div>
         <section>
-          <div id="stores">
-            Tiendas
-            {this.state.stores}
-          </div>
+          <Stores ref="stores" rawData={this.state.rawData}/>
           <div id="sub-nav">
-            <div>Productos</div>
-            <div>
-            <form onSubmit={this.search}>
-              <input type="text" name="search" placeholder="¿Qué estás buscando?"/>
-              <input type="submit"/>
-            </form>
-            </div>
-            <div>Ordenar por</div>
-            <section id="results"></section>
+            <div id="title-count">Productos</div>
+            <SearchBar 
+              rawData={this.state.rawData}
+              paintProds={this.paintProds}
+            />
+            <div id="order-prods">Ordenar por</div>
+            <section id="results">
+              {this.state.products}
+            </section>
           </div>
         </section>
       </div>

@@ -52,22 +52,40 @@ section{
 
 #stores{
   width: 30%;
+  padding-left: 6%;
 }
 
 #sub-nav{
   display: flex;
   flex-wrap: wrap;
   width:100%;
-  height: 6vh;
+}
+
+#title-count,
+#sub-nav form,
+#order-prods{
+  width:33%;
+  height:8vh;
+  display: flex;
   align-items: center;
 }
 
-#sub-nav div{
-  width:33%;
+#results{
+  display: flex;
+  flex-wrap: wrap;
+  width:100%;
+  
 }
 
-#results{
-  height:30vh;
+.prod-card{
+  width:25%;
+}
+
+.img-box{
+  height:25vh;
   width:100%;
-  background: orange;
+}
+
+img{
+  height:100%;
 }
