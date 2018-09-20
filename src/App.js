@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Stores} from './components/Stores';
 import {SearchBar} from './components/SearchBar';
 import './App.css';
+import { OrderSelect } from './components/OrderSelect';
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class App extends Component {
           status = true;
           this.setState({rawData:json_obj.results});
           this.refs.stores.getStores();
+          this.paintProds(this.state.rawData)
         } else {
           console.error(xhr.statusText);
         }
@@ -88,12 +90,15 @@ class App extends Component {
         <section>
           <Stores ref="stores" rawData={this.state.rawData}/>
           <div id="sub-nav">
-            <div id="title-count">Productos</div>
+            <div id="title-count">Productos ({this.state.rawData.length})</div>
             <SearchBar 
               rawData={this.state.rawData}
               paintProds={this.paintProds}
             />
-            <div id="order-prods">Ordenar por</div>
+            <OrderSelect
+              rawData={this.state.rawData}
+              paintProds={this.paintProds}
+            />
             <section id="results">
               {this.state.products}
             </section>
