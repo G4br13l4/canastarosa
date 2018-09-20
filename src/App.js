@@ -73,7 +73,7 @@ class App extends Component {
             MARKET | INSPIRE
           </div>
           <div id="nav-sections">
-            <div>Delicios</div>
+            <div>Delicioso</div>
             <div>Fiestas</div>
             <div>Diseño</div>
             <div>Infantil</div>
@@ -88,9 +88,14 @@ class App extends Component {
           <p>Delicioso</p>
         </div>
         <section>
-          <Stores ref="stores" rawData={this.state.rawData}/>
+          <Stores 
+            ref="stores" 
+            rawData={this.state.rawData}
+            rawData={this.state.rawData}
+            paintProds={this.paintProds}
+          />
           <div id="sub-nav">
-            <div id="title-count">Productos ({this.state.rawData.length})</div>
+            <div id="title-count">Productos ({this.state.products.length})</div>
             <SearchBar 
               rawData={this.state.rawData}
               paintProds={this.paintProds}

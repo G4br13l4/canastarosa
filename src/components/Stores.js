@@ -1,4 +1,5 @@
 import React from 'react';
+import {Store} from './Store';
 
 export class Stores extends React.Component{
     constructor(props) {
@@ -7,7 +8,9 @@ export class Stores extends React.Component{
           stores:[]
         };
         this.getStores = this.getStores.bind(this);
+        this.getAllProds = this.getAllProds.bind(this);
     }
+
     getStores(){
         let allProducts = this.props.rawData;
         //get all the names of the stores
@@ -25,6 +28,7 @@ export class Stores extends React.Component{
     }
 
     countStores(uniqueStores, allStores){
+        
         let stores = uniqueStores.map(function(unique) {
           let count=0;
             allStores.forEach(function(element) {
@@ -32,22 +36,29 @@ export class Stores extends React.Component{
                 count++
               }
             });
-          //create template of store
-          let store=(
-            <div>
-              <p>{unique}<span> ({count})</span></p>
-            </div>
+          
+          return (
+            <Store
+              name={unique}
+              counter={count}
+              rawData={this.props.rawData}
+              paintProds={this.props.paintProds}
+            />
           );
-          return store;
-        });
+        }.bind(this));
         //paint store
         this.setState({stores:stores})
+    }
+
+    getAllProds(){
+        this.props.paintProds(this.props.rawData);
     }
 
     render(){
         return(
             <div id="stores">
-                Tiendas
+                <p>Tiendas</p>
+                <p onClick={this.getAllProds}>Todas ({this.props.rawData.length})</p>
                 {this.state.stores}
             </div>
         );
